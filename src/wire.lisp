@@ -112,7 +112,7 @@
 (defun cb-push-foreign-octets (cb carray n)
   (declare (type circular-buffer cb)
            (type cffi:foreign-pointer carray)
-           (type fixnum size))
+           (type fixnum n))
   (unless (plusp n)
     (return-from cb-push-foreign-octets))
   (assert (>= (cb-free-space cb) n))
@@ -577,7 +577,7 @@ in the circular buffer and return the number of iovecs used."
              ,@(when objects
                 `((,offset 8)))
              ,@(mapcar #'list object-syms objects))
-         (declare (type wl-uint ,offset))
+         ,@(when objects `((declare (type wl-uint ,offset))))
          (cffi:with-foreign-pointer (,cptr (%wl-message-size ,types ,@object-syms) ,size)
            (%write-wl-uint ,sender-id ,cptr 0)
            (%write-wl-uint (dpb ,size (byte 16 16) ,opcode) ,cptr 4)
