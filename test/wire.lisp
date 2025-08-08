@@ -49,8 +49,10 @@
       (mocket 0 0) (:int :int :int :int :int)
       0 10 #x7fffffff -10 #x-80000000)
 
-    (fail (wire:send-wl-message (mocket 0 0) (:int) #x-80000001))
-    (fail (wire:send-wl-message (mocket 0 0) (:int) #x80000000))))
+    ;; EVAL form to prevent type mismatch warning during compilation.
+    ;;  That is a good warning, but that's the intent.
+    (fail (wire:send-wl-message (mocket 0 0) (:int) (eval #x-80000001)))
+    (fail (wire:send-wl-message (mocket 0 0) (:int) (eval #x80000000)))))
 
 (define-test recv-wl-int
   (let ((mocket (make-instance 'mock-socket)))
@@ -80,8 +82,10 @@
       (mocket 0 0) (:uint :uint :uint)
       0 10 #xffffffff)
 
-    (fail (wire:send-wl-message (mocket 0 0) (:uint) -1))
-    (fail (wire:send-wl-message (mocket 0 0) (:uint) #x100000000))))
+    ;; EVAL form to prevent type mismatch warning during compilation.
+    ;;  That is a good warning, but that's the intent.
+    (fail (wire:send-wl-message (mocket 0 0) (:uint) (eval -1)))
+    (fail (wire:send-wl-message (mocket 0 0) (:uint) (eval #x100000000)))))
 
 (define-test recv-wl-uint
   (let ((mocket (make-instance 'mock-socket)))
@@ -115,8 +119,10 @@
       (mocket 0 0) (:fixed :fixed :fixed)
       25/2 #x7fffffff/100 #x-800000)
 
-    (fail (wire:send-wl-message (mocket 0 0) (:fixed) #x800000))
-    (fail (wire:send-wl-message (mocket 0 0) (:fixed) #x-80000001/100))))
+    ;; EVAL form to prevent type mismatch warning during compilation.
+    ;;  That is a good warning, but that's the intent.
+    (fail (wire:send-wl-message (mocket 0 0) (:fixed) (eval #x800000)))
+    (fail (wire:send-wl-message (mocket 0 0) (:fixed) (eval #x-80000001/100)))))
 
 (define-test recv-wl-fixed
   (let ((mocket (make-instance 'mock-socket)))
