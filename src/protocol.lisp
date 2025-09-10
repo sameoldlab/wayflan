@@ -42,7 +42,7 @@
 Interfaces are message-based. Requests are actuated as server-bound messages, while events are client-bound. Both requests and events have opcodes set by the order each was defined, and identify which request or event to act on."))
 
 (deftype %wl-message-type ()
-  '(member :desctuctor nil))
+  '(member :destructor nil))
 
 (defclass %wl-message (%wl-named-object)
   ((%type :type %wl-message-type :reader wl-type
