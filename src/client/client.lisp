@@ -648,7 +648,14 @@ OPTIONS:
                           @)))
                    (:fixed `(read-wl-fixed ,buffer))
                    (:array `(read-wl-array ,buffer))
-                   (:string `(read-wl-string ,buffer))
+                   ((:string &key allow-null)
+                    (@and
+                      `(read-wl-string ,buffer)
+                      (if allow-null
+                          @
+                          `(or ,|@|
+                               (error 'wl-message-error
+                                      :summary "Server sent null for non-nullable string argument")))))
                    (:fd `(read-fd (%wl-display-socket
                                     (wl-proxy-display ,proxy))))))))
         `(progn
