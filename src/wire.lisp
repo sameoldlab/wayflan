@@ -645,11 +645,12 @@ in the circular buffer and return the number of iovecs used."
          (body-size (padded-size nul-length)))
     (prog2
       (check-size buffer body-size)
-      (cffi:foreign-string-to-lisp
-        (buf-ptr buffer)
-        :offset (buf-offset buffer)
-        :max-chars (1- nul-length)
-        :encoding :utf-8)
+      (when (plusp nul-length)
+        (cffi:foreign-string-to-lisp
+          (buf-ptr buffer)
+          :offset (buf-offset buffer)
+          :max-chars (1- nul-length)
+          :encoding :utf-8))
       (incf-buf buffer body-size))))
 
 (defun read-wl-array (buffer)
