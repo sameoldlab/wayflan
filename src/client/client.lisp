@@ -627,12 +627,16 @@ OPTIONS:
                     (@and
                       `(%find-proxy! (wl-proxy-display ,proxy) id)
                       (if allow-null
-                          `(when id ,|@|)
+                          `(unless (zerop id) ,|@|)
                           @)
                       `(let* ((id (read-wl-uint ,buffer))
                               (proxy ,|@|))
                          ,(when interface
-                            `(check-type proxy ,interface))
+                            (@and
+                              `(check-type proxy ,interface)
+                              (if allow-null
+                                  `(when proxy ,|@|)
+                                  @)))
                          proxy)))
                    (((:int :uint) &key enum)
                     (@and
